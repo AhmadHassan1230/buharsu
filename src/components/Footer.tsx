@@ -75,6 +75,10 @@ export function Footer() {
         <p className="footer__legal">
           <a href="/kvkk">KVKK ve gizlilik</a>
         </p>
+        <p className="footer__credit">
+          Made by{' '}
+          <a href="https://axerodesign.com" target="_blank" rel="noopener">axerodesign</a>
+        </p>
       </div>
     </footer>
   );
