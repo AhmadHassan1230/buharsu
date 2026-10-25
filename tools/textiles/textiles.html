@@ -1,0 +1,266 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#000}canvas{display:block}</style></head>
+<body><canvas id="c"></canvas>
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 uRes;
+uniform float uMode;   // 0 linen, 1 carpet, 2 quilt, 3 sheer, 4 knit, 5 boucle, 6 overlock, 7 velvet
+uniform float uDirt;   // 0 clean → 1 soiled (demo only)
+uniform float uSeed;
+uniform vec3 uTint;    // base colour
+uniform vec3 uTint2;   // secondary colour
+uniform float uScale;  // texel scale multiplier
+uniform vec2 uLight;   // light direction (screen space)
+uniform float uTilt;
+uniform float uExp;   // 0 flat → 1 strong perspective (far edge at top)
+
+float h11(float p){ p = fract(p * .1031); p *= p + 33.33; p *= p + p; return fract(p); }
+float h21(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * .1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
+vec2 h22(vec2 p){ vec3 p3 = fract(vec3(p.xyx) * vec3(.1031, .1030, .0973)); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.xx + p3.yz) * p3.zy); }
+float vn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.-2.*f);
+  return mix(mix(h21(i), h21(i+vec2(1,0)), f.x), mix(h21(i+vec2(0,1)), h21(i+vec2(1,1)), f.x), f.y); }
+float fbm(vec2 p){ float a = .5, s = 0.; for (int i = 0; i < 6; i++){ s += a * vn(p); p = p * 2.03 + 17.1; a *= .5; } return s; }
+vec2 worley(vec2 p){ vec2 i = floor(p), f = fract(p); float d1 = 9., d2 = 9.;
+  for (int y = -1; y <= 1; y++) for (int x = -1; x <= 1; x++){ vec2 g = vec2(x, y); vec2 o = h22(i + g + uSeed);
+    float d = length(g + o - f); if (d < d1){ d2 = d1; d1 = d; } else if (d < d2) d2 = d; }
+  return vec2(d1, d2); }
+
+// ---------- height fields (return height, writes albedo) ----------
+vec3 alb;
+
+float linen(vec2 p){
+  float s = 13. * uScale;
+  vec2 q = p / s + vec2(fbm(p * .004) * 1.2, fbm(p * .004 + 9.) * 1.2);
+  vec2 c = floor(q), f = fract(q);
+  float warpJ = h11(c.x + uSeed), weftJ = h11(c.y * 1.7 + uSeed);
+  float slubW = .75 + .5 * fbm(vec2(c.x * 3., q.y * .35)), slubF = .75 + .5 * fbm(vec2(q.x * .35, c.y * 3.));
+  float warp = cos(clamp((f.x - .5) / (.46 * slubW), -1., 1.) * 1.5708);
+  float weft = cos(clamp((f.y - .5) / (.46 * slubF), -1., 1.) * 1.5708);
+  bool over = mod(c.x + c.y, 2.) < 1.;
+  float along = over ? sin(f.y * 3.1416) : sin(f.x * 3.1416);
+  float h = over ? max(warp * (.55 + .45 * along), weft * .6) : max(weft * (.55 + .45 * along), warp * .6);
+  float fiber = fbm(p * vec2(.9, .12)) * .5 + fbm(p * vec2(.12, .9)) * .5;
+  alb = uTint * (.86 + .22 * (over ? warpJ : weftJ)) * (.9 + .2 * fiber);
+  return h * .8 + fiber * .25;
+}
+
+// Muted traditional field: large stepped medallions (göbek) on a madder ground.
+vec3 motif(vec2 k){
+  vec2 m = mod(k + vec2(48., 0.), vec2(96., 120.)) - vec2(48., 60.);
+  float d = abs(m.x) * 1.15 + abs(m.y);
+  d = floor(d / 2.) * 2.;                                  // stepped edges, like knotted outlines
+  vec3 madder = vec3(.52, .2, .16), deep = vec3(.36, .13, .12), indigo = vec3(.17, .21, .3), ivory = vec3(.88, .84, .76), camel = vec3(.68, .53, .36);
+  vec3 col = deep;
+  col = mix(col, indigo, step(d, 40.));
+  col = mix(col, ivory, step(d, 36.));
+  col = mix(col, madder, step(d, 34.));
+  col = mix(col, ivory, step(d, 22.) * step(18., d));
+  col = mix(col, camel, step(d, 16.));
+  col = mix(col, indigo, step(d, 8.));
+  col = mix(col, ivory, step(d, 3.));
+  // small eyes scattered in the field
+  vec2 e = mod(k, vec2(16., 20.)) - vec2(8., 10.);
+  float eye = step(abs(e.x) + abs(e.y), 2.) * step(44., d);
+  col = mix(col, camel * .95, eye);
+  return col;
+}
+
+float carpet(vec2 p){
+  float s = 6.5 * uScale;
+  vec2 q = p / s;
+  vec2 c = floor(q), f = fract(q) - .5;
+  float wob = (h21(c + uSeed) - .5) * .25;
+  float r = length(f * vec2(1., 1.25)) + wob * .2;
+  float h = smoothstep(.62, .0, r);
+  vec2 jit = (vec2(vn(p * .9), vn(p * .9 + 5.)) - .5) * 1.6;   // pile fibres spill over knot edges
+  vec3 col = motif(floor(q + jit));
+  float abrash = .88 + .24 * fbm(vec2(c.x * .015, c.y * .25));
+  float fuzz = fbm(p * .7);
+  alb = mix(col, uTint, .1) * abrash * (.85 + .3 * fuzz);
+  return h * .55 + fuzz * .45;
+}
+
+float quilt(vec2 p){
+  float s = 120. * uScale;
+  vec2 q = p / s;
+  vec2 r = vec2(q.x + q.y, q.x - q.y);                      // diagonal lattice
+  vec2 f = fract(r) - .5;
+  float d = max(abs(f.x), abs(f.y));
+  float puff = pow(clamp(1. - d * 2., 0., 1.), .55);
+  float seam = smoothstep(.47, .5, d);
+  float stitch = seam * step(.5, fract((f.x + f.y) * 9.));
+  float weave = vn(p * vec2(.55, 2.2)) * .5 + vn(p * vec2(2.2, .55)) * .5;
+  float damask = smoothstep(.3, .7, fbm(q * 3.1 + 2.));
+  alb = mix(uTint, uTint2, damask * .35) * (.95 + .08 * weave) * (1. - stitch * .08);
+  return puff * .85 + weave * .05 - seam * .25;
+}
+
+float sheer(vec2 p){
+  float x = p.x / (uRes.x) * 7.5;
+  float folds = .5 + .5 * sin(x * 6.2832 + fbm(vec2(x * .6, p.y * .0015)) * 3.5 + p.y * .00035);
+  float folds2 = .5 + .5 * sin(x * 13. + 1.7 + fbm(vec2(x, p.y * .002)) * 2.);
+  float weave = vn(p * vec2(1.4, .25)) * .5 + vn(p * vec2(.25, 1.4)) * .5;
+  float glow = smoothstep(1.2, -.1, p.y / uRes.y) * .25;
+  alb = mix(uTint2, uTint, folds * .7 + folds2 * .3) * (.97 + .05 * weave) + glow * vec3(1., .97, .9);
+  return folds * .9 + folds2 * .3 + weave * .02;
+}
+
+float knit(vec2 p){
+  float s = 46. * uScale;
+  vec2 q = p / vec2(s, s * .62);
+  q.x += fbm(q * .3) * .1;
+  vec2 c = floor(q), f = fract(q);
+  float side = f.x < .5 ? -1. : 1.;
+  vec2 g = vec2(fract(f.x * 2.) - .5, f.y - .5);
+  float ang = side * .62;
+  mat2 R = mat2(cos(ang), -sin(ang), sin(ang), cos(ang));
+  vec2 e = R * g;
+  float lobe = 1. - smoothstep(.0, 1., length(e * vec2(2.4, 1.05)));
+  float ply = .5 + .5 * sin((e.y * 3. + e.x * 9.) * 3.1416 * 2.);
+  float fuzz = fbm(p * .45);
+  alb = uTint * (.82 + .18 * ply) * (.9 + .2 * fuzz) * (.96 + .08 * h21(c + uSeed));
+  return lobe * .9 + ply * .12 * lobe + fuzz * .15;
+}
+
+float boucle(vec2 p){
+  float s = 15. * uScale;
+  vec2 w1 = worley(p / s);
+  vec2 w2 = worley(p / (s * .55) + 7.);
+  float loops = smoothstep(.12, .0, abs(w1.x - .32)) + .7 * smoothstep(.1, .0, abs(w2.x - .3));
+  float base = 1. - w1.x;
+  float fuzz = fbm(p * .5);
+  alb = mix(uTint, uTint2, fbm(p * .02)) * (.85 + .3 * fuzz);
+  return loops * .55 + base * .35 + fuzz * .2;
+}
+
+float overlock(vec2 p){
+  float edge = uRes.y * .38;
+  float y = p.y;
+  float band = smoothstep(edge - 4., edge + 4., y) * (1. - smoothstep(edge + 120. * uScale, edge + 128. * uScale, y));
+  float wrap = .5 + .5 * sin((p.x * .9 + y * .55) * .22);
+  float bandProfile = sin(clamp((y - edge) / (124. * uScale), 0., 1.) * 3.1416);
+  float h;
+  if (y > edge + 124. * uScale) { h = carpet(p); }
+  else if (y > edge) {
+    float fuzz = fbm(p * .6);
+    alb = uTint2 * (.75 + .35 * wrap) * (.9 + .2 * fuzz);
+    h = bandProfile * .7 + wrap * .35 * bandProfile + fuzz * .1;
+  } else {
+    float grain = fbm(vec2(p.x * .004, p.y * .06)) ;
+    alb = vec3(.36, .29, .23) * (.8 + .35 * grain);          // oak floor
+    h = grain * .1;
+  }
+  return h;
+}
+
+float velvet(vec2 p){
+  float crush = fbm(p * .0035 + uSeed);
+  float s = 210. * uScale;
+  vec2 q = p / s; vec2 c = floor(q + .5 * vec2(mod(floor(q.y), 2.), 0.));
+  vec2 f = q - c - .5 + .5 * vec2(mod(floor(q.y), 2.), 0.);
+  f = fract(q + vec2(.5 * mod(floor(q.y), 2.), 0.)) - .5;
+  float r = length(f);
+  float tuft = smoothstep(.045, .0, r);
+  float pleat = (1. - smoothstep(.0, .5, r)) * .6 + .5 * pow(abs(sin(atan(f.y, f.x) * 4. + fbm(f * 6.) * 1.5)), 3.) * smoothstep(.45, .05, r) * .12;
+  float pile = fbm(p * 1.3) * .5 + .5 * fbm(p * .3);
+  alb = mix(uTint, uTint2, crush) * (.94 + .08 * pile) * (1. - tuft * .5);
+  return pleat - tuft * .6 + pile * .03 + crush * .3;
+}
+
+float field(vec2 p){
+  if (uMode < .5) return linen(p);
+  if (uMode < 1.5) return carpet(p);
+  if (uMode < 2.5) return quilt(p);
+  if (uMode < 3.5) return sheer(p);
+  if (uMode < 4.5) return knit(p);
+  if (uMode < 5.5) return boucle(p);
+  if (uMode < 6.5) return overlock(p);
+  return velvet(p);
+}
+
+vec2 plane(vec2 frag){
+  vec2 uv = frag / uRes;                       // y: 0 bottom → 1 top
+  float w = 1. + uTilt * 2. * uv.y;            // texels shrink toward the far (top) edge
+  return vec2((uv.x - .5) * uRes.x * w + uRes.x * .5, uRes.y * (1. - uv.y - uTilt * uv.y * uv.y));
+}
+void main(){
+  vec2 p = plane(gl_FragCoord.xy);
+  float e = 1.;
+  float h = field(p);
+  vec3 a = alb;
+  float hx = field(plane(gl_FragCoord.xy + vec2(e, 0.))), hy = field(plane(gl_FragCoord.xy - vec2(0., e)));
+  float bump = uMode > 2.5 && uMode < 3.5 ? 2. : uMode > 6.5 ? 6. : 2.6;
+  vec3 n = normalize(vec3((h - hx) * bump, (h - hy) * bump, 1.));
+  vec3 L = normalize(vec3(uLight, .9));
+  float diff = clamp(dot(n, L), 0., 1.);
+  float wrapL = diff * .78 + .22;
+  vec3 V = vec3(0., 0., 1.);
+  float spec = pow(clamp(dot(reflect(-L, n), V), 0., 1.), uMode > 6.5 ? 6. : 18.) * (uMode > 6.5 ? .35 : .12);
+  float ao = mix(.62, 1., clamp(h, 0., 1.));
+  vec3 col = a * wrapL * ao + spec;
+
+  // raking light across the frame + vignette
+  vec2 uv = gl_FragCoord.xy / uRes;
+  float rake = mix(.78, 1.1, smoothstep(0., 1., dot(uv - .5, -normalize(uLight)) + .5));
+  float vig = smoothstep(1.15, .35, length((uv - .5) * vec2(1., uRes.y / uRes.x * .9)));
+  col *= rake * mix(.72, 1., vig);
+
+  // soil (demo before-state only)
+  if (uDirt > 0.) {
+    float blot = smoothstep(.45, .8, fbm(p * .006 + 3.)) * .55 + smoothstep(.62, .9, fbm(p * .02 + 8.)) * .35;
+    float grime = fbm(p * .08) * .25;
+    vec3 film = vec3(.55, .5, .42);
+    float lum = dot(col, vec3(.299, .587, .114));
+    vec3 soiled = mix(col, vec3(lum) * vec3(1.02, .98, .9), .45) * (.82 - grime * .3);
+    soiled = mix(soiled, soiled * film * 1.25, blot);
+    col = mix(col, soiled, uDirt);
+  }
+  col *= uExp;
+  // gentle grade + dither
+  col = pow(max(col, 0.), vec3(.96));
+  col += (h21(p + 3.) - .5) / 255.;
+  gl_FragColor = vec4(col, 1.);
+}
+</script>
+<script>
+const c = document.getElementById('c');
+const gl = c.getContext('webgl', { preserveDrawingBuffer: true, antialias: false });
+function sh(t, s) { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; }
+const prog = gl.createProgram();
+gl.attachShader(prog, sh(gl.VERTEX_SHADER, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));
+gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, document.getElementById('fs').textContent));
+gl.linkProgram(prog); gl.useProgram(prog);
+const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW);
+const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+const U = (n) => gl.getUniformLocation(prog, n);
+window.render = (o) => {
+  c.width = o.w; c.height = o.h; gl.viewport(0, 0, o.w, o.h);
+  gl.uniform2f(U('uRes'), o.w, o.h);
+  gl.uniform1f(U('uMode'), o.mode); gl.uniform1f(U('uDirt'), o.dirt || 0); gl.uniform1f(U('uSeed'), o.seed || 1);
+  gl.uniform3fv(U('uTint'), o.tint); gl.uniform3fv(U('uTint2'), o.tint2 || o.tint);
+  gl.uniform1f(U('uScale'), o.scale || 1); gl.uniform2fv(U('uLight'), o.light || [-.6, .55]);
+  gl.uniform1f(U('uTilt'), o.tilt || 0); gl.uniform1f(U('uExp'), o.exp || 1.3);
+  gl.drawArrays(gl.TRIANGLES, 0, 6);
+  // Photographic depth of field: blur away from a focal band (y = o.focus, 0 top → 1 bottom).
+  const out = document.createElement('canvas'); out.width = o.w; out.height = o.h;
+  const x = out.getContext('2d');
+  x.drawImage(c, 0, 0);
+  if (o.dof) {
+    const bl = document.createElement('canvas'); bl.width = o.w; bl.height = o.h;
+    const bx = bl.getContext('2d');
+    bx.filter = `blur(${o.dof}px)`; bx.drawImage(c, 0, 0);
+    bx.filter = 'none';
+    bx.globalCompositeOperation = 'destination-out';
+    const f = o.focus ?? .62, band = o.band ?? .22;
+    const g = bx.createLinearGradient(0, 0, 0, o.h);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(Math.max(0, f - band), 'rgba(0,0,0,1)');
+    g.addColorStop(Math.min(1, f + band * .7), 'rgba(0,0,0,1)');
+    g.addColorStop(1, 'rgba(0,0,0,0.15)');
+    bx.fillStyle = g; bx.fillRect(0, 0, o.w, o.h);
+    x.drawImage(bl, 0, 0);
+  }
+  return out.toDataURL('image/png');
+};
+</script></body></html>
