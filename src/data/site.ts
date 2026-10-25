@@ -505,7 +505,16 @@ export const home = {
 // and decides which hizmet page shows the review (home shows all of them).
 //   { name: 'Ayşe K.', place: 'Sancaktepe / Sarıgazi', service: 'koltuk-yikama', rating: 5, text: '…' }
 export type Review = { name: string; place: string; service: string; rating: number; text: string };
-export const reviews: Review[] = [];
+export const reviews: Review[] = [
+  { name: 'Emre Yılmaz', place: 'Sancaktepe', service: 'genel', rating: 5, text: 'Buharsu’ya ilk defa temizlik yaptırdık, gayet memnun kaldık. Baştan sona iletişimleri iyiydi, söyledikleri saatte geldiler. Sefa Bey ve ekibine ilgileri ve emekleri için teşekkür ederiz.' },
+  { name: 'Elif Demir', place: 'Çekmeköy', service: 'genel', rating: 5, text: 'Bir tanıdığımızın tavsiyesiyle ulaştık. Koltukları ve halıları temizlettik, ikisi de içimize sindi. Evde küçük çocuk olunca insan temizliğe daha çok dikkat ediyor. Ekibin de eli oldukça özenliydi, sağ olsunlar.' },
+  { name: 'Burak Aydın', place: 'Kurtköy', service: 'genel', rating: 5, text: 'Hem koltuk hem perde yıkama için Buharsu’yu tercih ettik. Aklımıza takılanları arayıp sorduk, hepsini güzelce anlattılar. İşlerini de özenerek yaptılar. Sefa Bey’e ve ekibine ayrıca teşekkür ediyorum.' },
+  { name: 'Zeynep Çelik', place: 'Sancaktepe', service: 'genel', rating: 5, text: 'Taşınma öncesi halı ve koltuk işini aradan çıkarmak istedik. Randevuyu da bize uygun şekilde ayarladılar, çok yardımcı oldular. Temizlikten memnunuz, ihtiyaç olduğunda yine arayacağız.' },
+  { name: 'Derya Şahin', place: 'Çekmeköy', service: 'perde-yikama', rating: 5, text: 'Tülleri uzun zamandır yıkatmak istiyordum, sonunda fırsat buldum. Temizlenince odanın havası bile değişti. Teslim alırken de getirirken de özenliydiler. Sefa Bey ve ekibinin eline sağlık, ben çok memnun kaldım.' },
+  { name: 'Mert Kaya', place: 'Kurtköy', service: 'koltuk-yikama', rating: 5, text: 'Açık renk koltuklarımız özellikle kol kısımlarından bayağı kirlenmişti. Temizlikten sonra belirgin şekilde fark etti. Kuruması konusunda da neye dikkat etmemiz gerektiğini anlattılar. Aceleye getirmeden çalıştıkları için teşekkür ederiz.' },
+  { name: 'Serkan Arslan', place: 'Sancaktepe', service: 'hali-yikama', rating: 5, text: 'Salondaki büyük halıyı ve yollukları verdik. Gayet temiz, düzgün paketlenmiş şekilde geldi. Saçaklarına kadar ilgilenilmiş olması hoşuma gitti. Sefa Bey’e ve ekibine teşekkürler, ellerine sağlık.' },
+  { name: 'Ebru Yıldız', place: 'Çekmeköy', service: 'yatak-yikama', rating: 5, text: 'İlk kez yatak yıkama hizmeti aldım. Nasıl yapılacağını pek bilmiyordum, başlamadan önce anlattılar. Özellikle kenar kısımlarla da uğraştılar, üstten geçip bırakmadılar. Sonuçtan memnun kaldım, ekibe teşekkür ederim.' },
+];
 
 /** True when a review's place is a confirmed service area (whole district, or an allowed mahalle). */
 export function inServiceArea(place: string) {
@@ -516,8 +525,13 @@ export function inServiceArea(place: string) {
   return a.parts.includes(hood ?? district);
 }
 
-export const reviewsFor = (service?: string) =>
-  reviews.filter((r) => inServiceArea(r.place) && (!service || r.service === service));
+// Home: every review. A hizmet page: its own reviews first, then the general ones ('genel').
+export const reviewsFor = (service?: string) => {
+  const ok = reviews.filter((r) => inServiceArea(r.place));
+  if (!service) return ok;
+  return [...ok.filter((r) => r.service === service), ...ok.filter((r) => r.service === 'genel')];
+};
+export const hasOwnReviews = (service: string) => reviews.some((r) => r.service === service && inServiceArea(r.place));
 
 export const gallery: (Media & { caption: string })[] = [
   { ...photo('g-1', 'Profesyonel makineyle yıkanan motifli halı', 1122, 1402), caption: 'Halı yıkama' },

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { pageMeta } from '@/lib/meta';
 import { notFound } from 'next/navigation';
-import { areas, serviceBySlug, services, wa } from '@/data/site';
+import { areas, hasOwnReviews, serviceBySlug, services, wa } from '@/data/site';
 import { Band, Faqs, PageHero } from '@/components/page/Parts';
 import { Arrow, Btn, TextLink } from '@/components/ui';
 import { AreaMap } from '@/components/AreaMap';
@@ -72,7 +72,7 @@ export default async function ServicePage({ params }: PageProps<'/hizmetler/[slu
         </ul>
       </Band>
 
-      <Trust service={s.slug} title={`${s.name} yorumları`} />
+      <Trust service={s.slug} title={hasOwnReviews(s.slug) ? `${s.name} yorumları` : 'Müşteri yorumları'} />
 
       <Faqs items={s.faqs} />
 

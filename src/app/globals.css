@@ -716,7 +716,7 @@ html.menu-open .header__wa { --btn-bg: var(--porselen); --btn-fg: var(--komur); 
   .reviews__head { display: block; }
   .reviews__title { font-size: clamp(2.35rem, 1rem + 6.4vw, 3.2rem); }
   .reviews__lead { margin-top: 10px; }
-  .reviews__list {
+  .reviews .reviews__list {
     display: flex; gap: 10px; margin: 28px calc(var(--gutter) * -1) 0; padding: 0 var(--gutter) 4px;
     overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
     overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch;
