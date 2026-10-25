@@ -40,7 +40,6 @@ export function setupMotion() {
   });
 
   frame();
-  mobileBar();
   if (reduced) return;
   lanesEdge();
   lanesReveal();
@@ -71,28 +70,6 @@ function frame() {
       onToggle: (st) => html.classList.toggle('past-hero', st.isActive),
     });
     return () => html.classList.remove('past-hero');
-  });
-}
-
-// Phone action bar: appears once the first screen is behind you, hides over the final CTA.
-function mobileBar() {
-  const html = document.documentElement;
-  onPage(() => {
-    html.classList.remove('bar-on', 'bar-hide');
-    ScrollTrigger.create({
-      start: () => innerHeight * 0.7,
-      end: 'max',
-      onToggle: (st) => html.classList.toggle('bar-on', st.isActive),
-    });
-    document.querySelectorAll('[data-hide-bar], .footer').forEach((el) => {
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 85%',
-        end: 'bottom top',
-        onToggle: (st) => html.classList.toggle('bar-hide', st.isActive),
-      });
-    });
-    return () => html.classList.remove('bar-on', 'bar-hide');
   });
 }
 

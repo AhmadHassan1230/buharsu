@@ -1,5 +1,5 @@
-import { areas, home, wa } from '@/data/site';
-import { Arrow, Btn } from '../ui';
+import { areas, home } from '@/data/site';
+import { Arrow } from '../ui';
 import { HeroFilm } from './HeroFilm';
 
 export function Hero() {
@@ -17,10 +17,10 @@ export function Hero() {
         </p>
         <h1 id="hero-title" className="hero__sub">{h.sub}</h1>
         <div className="hero__actions">
-          <Btn href={wa()} tone="light" icon="wa">{h.primary}</Btn>
-          <a className="hero__more" href="#hizmetler">
-            <span>{h.secondary}</span>
-            <Arrow dir="down" />
+          <a className="btn btn--light hero__cta" href="#hizmetler" data-fill>
+            <span className="btn__fill" aria-hidden="true" />
+            <span className="btn__label">{h.secondary}</span>
+            <Arrow dir="down" className="btn__arrow hero__cta-arrow" />
           </a>
         </div>
       </div>
