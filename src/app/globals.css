@@ -328,7 +328,7 @@ html.menu-open .fab { opacity: 0; pointer-events: none; }
   .mbar a:active { scale: 0.98; }
   .fab { right: 14px; bottom: calc(14px + var(--mbar-h)); gap: 10px; }
   .fab__btn { width: 52px; height: 52px; }
-  .fab__btn--tel { display: none; }
+  .fab__btn--tel, .fab__btn--wa { display: none; }
 }
 
 /* ---------------------------------------------------------------------------------------------

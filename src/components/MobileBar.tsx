@@ -3,7 +3,7 @@ import { PhoneIcon, WaIcon } from './ui';
 
 // Contact actions that never leave the screen (client request):
 // - phones: a fixed bottom bar, "WhatsApp" + "Tıkla Ara", visible from the first screen to the footer
-// - every screen: a round floating Instagram button (plus Ara on desktop; WhatsApp lives in the bar / header)
+// - floating round buttons: Instagram everywhere; WhatsApp + Ara on desktop only (phones have them in the bar)
 export function MobileBar() {
   return (
     <>
@@ -15,7 +15,10 @@ export function MobileBar() {
           <PhoneIcon /> <span>Tıkla Ara</span>
         </a>
       </div>
-      <div className="fab" role="region" aria-label="Instagram ve telefon">
+      <div className="fab" role="region" aria-label="WhatsApp, Instagram ve telefon">
+        <a className="fab__btn fab__btn--wa" href={wa()} target="_blank" rel="noopener" aria-label="WhatsApp’tan yazın">
+          <WaIcon />
+        </a>
         <a className="fab__btn fab__btn--ig" href={site.instagram.url} target="_blank" rel="noopener" aria-label={`Instagram: ${site.instagram.handle}`}>
           <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
             <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="1.9" />
