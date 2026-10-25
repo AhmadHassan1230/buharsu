@@ -8,7 +8,6 @@
 //
 // Assumptions / open items (mirrored in LAUNCH.md):
 // - Domain: `site.url` is a placeholder until the Istanbul domain is chosen.
-// - Founding year (2004) and the owner's name come from the Urfa website. Unverified, hidden.
 // - The Istanbul process (on-site vs. pickup, curtain removal, overlock colours) is not confirmed,
 //   so the copy describes it neutrally ("birlikte planlıyoruz").
 // - Neighbourhood (mahalle) lists are taken from official district lists and should be checked.
@@ -36,8 +35,6 @@ export const site = {
   // Search engine verification codes (meta tag content values). Empty = not rendered.
   verification: { google: '', yandex: '' },
   facts: {
-    urfaSince: { value: 2004, confirmed: false },
-    owner: { value: 'Sefa Çil', confirmed: false },
     istanbulAddress: { value: '', confirmed: false },
     hours: { value: '', confirmed: false },
   },
@@ -105,7 +102,7 @@ export const services: Service[] = [
     name: 'Koltuk yıkama',
     short: 'Kanepe, berjer ve köşe takımları için kumaşa uygun derin temizlik.',
     lead: 'Koltuk, evin en çok kullanılan eşyasıdır. Toz, ter ve günlük lekeler zamanla kumaşın derinine işler. Kumaşı inceleyip ona uygun yöntemi seçiyor, yüzeyle birlikte dolgu çevresine biriken kiri de hedefliyoruz.',
-    includes: ['Üçlü, ikili ve tekli koltuklar', 'Köşe takımları ve L koltuklar', 'Berjerler', 'Minder ve kırlentler', 'Şark köşesi ve sedir minderleri'],
+    includes: ['Üçlü, ikili ve tekli koltuklar', 'Köşe takımları ve L koltuklar', 'Berjerler', 'Minder ve kırlentler', 'Sedir ve oturma minderleri'],
     process: ['Kumaş ve etiket kontrolü', 'Toz alma ve ön hazırlık', 'Lekelere uygun ön işlem', 'Yıkama ve su çekimi', 'Son kontrol ve kuruma önerileri'],
     expect: 'Uzun süre beklemiş bazı lekeler kumaşın rengini kalıcı olarak değiştirmiş olabilir. Böyle bir durumu uygulamadan önce değerlendirip sizinle paylaşırız.',
     faqs: [
@@ -444,7 +441,7 @@ export const home = {
   },
   statement: {
     title: ['Her detayda özen.', 'Her dokunuşta ferahlık.'],
-    text: 'BUHARSU, Şanlıurfa’da koltuk ve halı temizliği yapan bir işletme olarak başladı. Şimdi aynı işi İstanbul Anadolu Yakası’nda yapıyoruz. Amacımız yalnızca temizlemek değil; eşyalarınıza özenli bir bakım sunmak.',
+    text: 'BUHARSU, İstanbul Anadolu Yakası’nda koltuk, halı ve ev tekstili temizliği yapıyor. Sancaktepe’den Tuzla’ya, hizmet verdiğimiz her mahallede aynı özenle çalışıyoruz. Amacımız yalnızca temizlemek değil; eşyalarınıza özenli bir bakım sunmak.',
     link: 'Hikâyemiz',
   },
   compare: {
@@ -485,10 +482,14 @@ export const home = {
   trust: {
     title: 'Yorumlar',
     lead: 'Müşterilerimizin deneyimleri.',
+    emptyTitle: 'Deneyiminizi bizimle paylaşın.',
+    emptyText: 'Hizmetimizden memnun kaldıysanız birkaç cümlelik yorumunuzu WhatsApp’tan gönderin; izninizle burada yayımlayalım.',
+    emptyCta: 'Yorumunuzu gönderin',
+    emptyMessage: 'Merhaba BUHARSU, aldığım hizmetle ilgili yorumumu paylaşmak istiyorum:',
     points: [
       { title: 'Doğrudan iletişim', text: 'Bize 0505 188 80 63 numarasından hem arayarak hem WhatsApp’tan ulaşırsınız. Alternatif hattımız: 0543 962 45 49.' },
       { title: 'Net hizmet bölgesi', text: 'Hangi mahallelere gittiğimizi açıkça yazıyoruz. Bölgemiz dışında söz vermiyoruz.' },
-      { title: 'Şanlıurfa’dan gelen deneyim', text: 'BUHARSU, Şanlıurfa’da faaliyet gösteren bir işletme. İstanbul’da aynı işi aynı özenle yapıyoruz.' },
+      { title: 'Anadolu Yakası’na odaklı', text: 'Yalnızca hizmet bölgemizdeki mahallelerde çalışıyoruz; bu sayede randevuları rahat planlıyoruz.' },
     ],
   },
   cta: {
@@ -499,13 +500,24 @@ export const home = {
   },
 };
 
-// Customer reviews, copied as published on the Şanlıurfa site.
-export const reviews: { name: string; place: string; text: string; rating: number }[] = [
-  { name: 'Yeliz Karataş', place: 'Karaköprü Sakini', rating: 5, text: 'Urfa’da şark köşesi temizletmek her zaman risklidir, kumaşın dokusu bozulur diye çekiniyorduk. Ancak Sefa beyin ekibi 20 yıllık tecrübesini gerçekten konuşturdu. 140 derece buharla hem tertemiz yaptılar hem de o eski lekelerden eser kalmadı. 2004’ten beri bu işi yapmalarının farkı her detayda belli oluyor, ellerine sağlık.' },
-  { name: 'Ahmet Şahin', place: 'Eyyübiye', rating: 5, text: 'Koltukları taşımakla uğraşmadan kapımıza Sefa bey ve temizlik ekibi tam dediği saatte geldi ve çok seri bir şekilde işini bitirdi. Vakumlama o kadar güçlü ki koltuklar çok kısa sürede kurudu. Şanlıurfa genelinde bu kalitede bir mobil servis hizmeti almak bizi çok memnun etti.' },
-  { name: 'Ayşe Demir', place: 'Haliliye', rating: 5, text: 'Bebekli bir ev olduğumuz için kimyasal kullanılmasına çok karşıydım. Firmanın %100 bitkisel solüsyonlar kullanması ve buharlı dezenfekte yapması içimi çok rahatlattı. Yataklarımız ve koltuklarımız hem dezenfekte oldu hem de mis gibi kokuyor. Şanlıurfa’da bu kadar profesyonel ve titiz bir hizmet bulmak zor, herkese tavsiye ederim.' },
-  { name: 'Fatma Yıldız', place: 'Karaköprü', rating: 5, text: 'Yemek masası sandalyelerindeki çıkmayan lekeler yüzünden umudumu kesmiştim ama buharlı yıkama mucizesini kendi gözlerimle gördüm. İlk günkü parlaklığına geri döndüler. 2004’ten bu yana gelen tecrübe ve kullanılan modern makineler gerçekten fark yaratıyor. Teşekkürler Sefa bey ve ekibi.' },
-];
+// Customer reviews. Add only real reviews, with the customer's permission.
+// `place` must be inside the service area (checked by `reviewsFor`); `service` is a service slug
+// and decides which hizmet page shows the review (home shows all of them).
+//   { name: 'Ayşe K.', place: 'Sancaktepe / Sarıgazi', service: 'koltuk-yikama', rating: 5, text: '…' }
+export type Review = { name: string; place: string; service: string; rating: number; text: string };
+export const reviews: Review[] = [];
+
+/** True when a review's place is a confirmed service area (whole district, or an allowed mahalle). */
+export function inServiceArea(place: string) {
+  const [district, hood] = place.split('/').map((x) => x.trim());
+  const a = areas.find((x) => x.district === district || x.parts.includes(district));
+  if (!a) return false;
+  if (a.scope === 'full') return true;
+  return a.parts.includes(hood ?? district);
+}
+
+export const reviewsFor = (service?: string) =>
+  reviews.filter((r) => inServiceArea(r.place) && (!service || r.service === service));
 
 export const gallery: (Media & { caption: string })[] = [
   { ...photo('g-1', 'Profesyonel makineyle yıkanan motifli halı', 1122, 1402), caption: 'Halı yıkama' },

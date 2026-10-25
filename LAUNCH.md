@@ -28,15 +28,14 @@ Everything below is either hidden on the site or written neutrally until confirm
 
 ## Hidden until confirmed (`confirmed: false` in `site.facts`)
 
-- [ ] Şanlıurfa founding year (2004, from the Urfa site). Shows on Hakkımızda when confirmed.
-- [ ] Owner name (Sefa Çil, from the Urfa site footer).
 - [ ] Istanbul address (only if customers can visit). Also add it to JSON-LD.
 - [ ] Opening hours. Add `openingHours` to JSON-LD once known.
 
 ## Not used on purpose
 
 - Urfa statistics (5000+ müşteri, %100 memnuniyet, 10.000+ koltuk). Unverified.
-- Urfa testimonials: shown verbatim in "Yorumlar" at the owner's request, with no origin label.
+- Any Şanlıurfa content: the site is Istanbul Anadolu Yakası only (owner's decision, 2026-10-25).
+- Invented reviews. `reviews` in site.ts is empty; Yorumlar sections show a "send your review" invite until real, permissioned reviews from the service area are added.
 - Claims like 140 °C, %99,9 bakteri, kimyasalsız, hızlı kuruma garantisi, ücretsiz servis,
   indirim.
 

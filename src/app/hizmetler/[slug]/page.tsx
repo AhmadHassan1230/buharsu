@@ -5,7 +5,7 @@ import { areas, serviceBySlug, services, wa } from '@/data/site';
 import { Band, Faqs, PageHero } from '@/components/page/Parts';
 import { Arrow, Btn, TextLink } from '@/components/ui';
 import { AreaMap } from '@/components/AreaMap';
-import { FinalCta } from '@/components/home/Sections';
+import { FinalCta, Trust } from '@/components/home/Sections';
 import { ldScript, serviceLd } from '@/lib/schema';
 
 export const dynamicParams = false;
@@ -71,6 +71,8 @@ export default async function ServicePage({ params }: PageProps<'/hizmetler/[slu
           ))}
         </ul>
       </Band>
+
+      <Trust service={s.slug} title={`${s.name} yorumları`} />
 
       <Faqs items={s.faqs} />
 

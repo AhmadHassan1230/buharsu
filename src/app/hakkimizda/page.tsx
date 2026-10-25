@@ -7,28 +7,27 @@ import { Btn } from '@/components/ui';
 import { FinalCta } from '@/components/home/Sections';
 
 export const metadata: Metadata = pageMeta({
-  title: 'Hakkımızda: Şanlıurfa’dan İstanbul’a',
-  description: 'BUHARSU, Şanlıurfa’da koltuk ve halı temizliğiyle başlayan bir işletme. Şimdi İstanbul Anadolu Yakası’nda aynı özenle hizmet veriyor.',
+  title: 'Hakkımızda: Anadolu Yakası’nda koltuk ve halı bakımı',
+  description: 'BUHARSU, İstanbul Anadolu Yakası’nda koltuk, halı ve ev tekstili temizliği yapar. Sancaktepe, Sultanbeyli, Çekmeköy, Kurtköy, Kavakpınar, Aydınlı ve Orhanlı’da.',
   path: '/hakkimizda',
 });
 
 export default function About() {
-  const since = site.facts.urfaSince.confirmed ? ` ${site.facts.urfaSince.value} yılından bu yana` : '';
   return (
     <>
       <PageHero
         crumbs={[{ name: 'Hakkımızda', href: '/hakkimizda' }]}
-        title={<>Şanlıurfa’dan<br />İstanbul’a.</>}
-        lead="BUHARSU, Şanlıurfa’da koltuk ve halı temizliğiyle başlayan bir işletme. Aynı işi şimdi İstanbul Anadolu Yakası’nda yapıyoruz."
+        title={<>Anadolu Yakası’nın<br />koltuk ve halı bakımı.</>}
+        lead="BUHARSU, İstanbul Anadolu Yakası’nda koltuk, halı ve ev tekstili temizliği yapan bir ekip. Az sayıda bölgeye odaklanıyor, her işi aynı özenle yapıyoruz."
         media={media.about}
       />
 
       <section className="story" aria-label="Hikâyemiz">
         <div className="story__chapter">
-          <p className="story__label">Şanlıurfa</p>
+          <p className="story__label">Adımız</p>
           <h2 className="story__title" data-split="lines">Adımız, işimizin iki aracından geliyor: buhar ve su.</h2>
           <p className="story__text" data-reveal="fade">
-            BUHARSU,{since} Şanlıurfa’da koltuk, yatak, halı ve şark köşesi temizliği yapıyor. Her eşyada aynı soruyla başlıyoruz: bu kumaş neye ihtiyaç duyuyor?
+            Koltuk, yatak, halı ve perde temizliğinde her eşyaya aynı soruyla başlıyoruz: bu kumaş neye ihtiyaç duyuyor? Buhar mı, yıkama mı, ikisi birden mi; kararı eşyayı görünce veriyoruz.
           </p>
         </div>
         <figure className="story__media" data-lanes>
@@ -36,10 +35,10 @@ export default function About() {
           <figcaption>Konsept görsel: BUHARSU mağaza cephesi tasarımı. Fotoğraf değildir.</figcaption>
         </figure>
         <div className="story__chapter story__chapter--b">
-          <p className="story__label">İstanbul</p>
-          <h2 className="story__title" data-split="lines">Aynı özen, yeni bir şehirde.</h2>
+          <p className="story__label">Hizmet bölgemiz</p>
+          <h2 className="story__title" data-split="lines">Anadolu Yakası’nda, size yakın.</h2>
           <p className="story__text" data-reveal="fade">
-            İstanbul’da Sancaktepe, Sultanbeyli ve Çekmeköy’ün tamamında; Pendik’te Kurtköy ve Kavakpınar, Tuzla’da Aydınlı ve Orhanlı’da hizmet veriyoruz.
+            Sancaktepe, Sultanbeyli ve Çekmeköy’ün tamamında; Pendik’te Kurtköy ve Kavakpınar, Tuzla’da Aydınlı ve Orhanlı’da hizmet veriyoruz.
           </p>
         </div>
       </section>

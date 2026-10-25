@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { gallery, home, media, reviews, site, wa } from '@/data/site';
+import { gallery, home, media, reviewsFor, site, wa } from '@/data/site';
 import { Compare } from '../Compare';
 import { Btn, TextLink } from '../ui';
 
@@ -99,35 +99,50 @@ export function Work({ head = true }: { head?: boolean }) {
   );
 }
 
-export function Trust() {
+export function Trust({ service, title }: { service?: string; title?: string }) {
   const t = home.trust;
+  const list = reviewsFor(service);
   return (
-    <section className="reviews" aria-labelledby="reviews-title">
+    <section className="reviews" aria-labelledby={`reviews-title${service ? `-${service}` : ''}`}>
       <div className="reviews__head">
-        <h2 id="reviews-title" className="reviews__title" data-split="lines">{t.title}</h2>
-        <p className="reviews__lead" data-reveal="fade">{t.lead}</p>
+        <h2 id={`reviews-title${service ? `-${service}` : ''}`} className="reviews__title" data-split="lines">{title ?? t.title}</h2>
+        {list.length > 0 && <p className="reviews__lead" data-reveal="fade">{t.lead}</p>}
       </div>
-      <ul className="reviews__list" role="list">
-        {reviews.map((r, i) => (
-          <li key={r.name} className="review" data-reveal="up" data-delay={String((i % 2) * 0.08)}>
-            <figure>
-              <p className="review__stars" aria-label={`${r.rating} üzerinden ${r.rating} yıldız`}>
-                {Array.from({ length: r.rating }, (_, k) => (
-                  <svg key={k} viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false">
-                    <path fill="currentColor" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z" />
-                  </svg>
-                ))}
-              </p>
-              <blockquote className="review__text">“{r.text}”</blockquote>
-              <figcaption className="review__who">
-                <span className="review__name">{r.name}</span>
-                <span className="review__place">{r.place}</span>
-              </figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
-      <p className="reviews__hint" aria-hidden="true">Kaydırarak tüm yorumları görün <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 12h16m0 0-6-6m6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg></p>
+      {list.length > 0 ? (
+        <>
+          <ul className="reviews__list" role="list">
+            {list.map((r, i) => (
+              <li key={`${r.name}-${i}`} className="review" data-reveal="up" data-delay={String((i % 2) * 0.08)}>
+                <figure>
+                  <p className="review__stars" aria-label={`5 üzerinden ${r.rating} yıldız`}>
+                    {Array.from({ length: r.rating }, (_, k) => (
+                      <svg key={k} viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false">
+                        <path fill="currentColor" d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L10 14.9l-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z" />
+                      </svg>
+                    ))}
+                  </p>
+                  <blockquote className="review__text">“{r.text}”</blockquote>
+                  <figcaption className="review__who">
+                    <span className="review__name">{r.name}</span>
+                    <span className="review__place">{r.place}</span>
+                  </figcaption>
+                </figure>
+              </li>
+            ))}
+          </ul>
+          {list.length > 1 && (
+            <p className="reviews__hint" aria-hidden="true">Kaydırarak tüm yorumları görün <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 12h16m0 0-6-6m6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg></p>
+          )}
+        </>
+      ) : (
+        <div className="reviews__empty" data-reveal="up">
+          <div>
+            <p className="reviews__empty-title">{t.emptyTitle}</p>
+            <p className="reviews__empty-text">{t.emptyText}</p>
+          </div>
+          <Btn href={wa(t.emptyMessage)} icon="wa">{t.emptyCta}</Btn>
+        </div>
+      )}
     </section>
   );
 }
