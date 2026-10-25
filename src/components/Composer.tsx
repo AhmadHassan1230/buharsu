@@ -1,6 +1,7 @@
 'use client';
 import { useId, useMemo, useState } from 'react';
 import { placeOptions, services, wa } from '@/data/site';
+import { trackContactIntent } from './ContactTracking';
 import { Arrow, WaIcon } from './ui';
 
 // Quote composer: builds a formatted WhatsApp message. Nothing is stored or sent by the site;
@@ -21,7 +22,11 @@ export function Composer({ service, place, compact }: { service?: string; place?
   }, [svc, plc, hood, note]);
 
   return (
-    <form className={`composer ${compact ? 'composer--compact' : ''}`} onSubmit={(e) => { e.preventDefault(); window.open(wa(message), '_blank', 'noopener'); }}>
+    <form className={`composer ${compact ? 'composer--compact' : ''}`} onSubmit={(e) => {
+      e.preventDefault();
+      trackContactIntent('whatsapp');
+      window.open(wa(message), '_blank', 'noopener');
+    }}>
       <div className="composer__row">
         <label className="field">
           <span className="field__label">Hizmet türü</span>

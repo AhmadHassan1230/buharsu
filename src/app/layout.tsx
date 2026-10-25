@@ -3,6 +3,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { MobileBar } from '@/components/MobileBar';
 import { Motion } from '@/components/Motion';
+import { ContactTracking } from '@/components/ContactTracking';
 import { site } from '@/data/site';
 import { businessLd, ldScript, websiteLd } from '@/lib/schema';
 import { mona } from './fonts';
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <main id="main" tabIndex={-1}>{children}</main>
         <Footer />
         <MobileBar />
+        <ContactTracking />
         <script type="application/ld+json" dangerouslySetInnerHTML={ldScript(businessLd())} />
         <script type="application/ld+json" dangerouslySetInnerHTML={ldScript(websiteLd())} />
         <Motion />

@@ -5,8 +5,10 @@ Everything below is either hidden on the site or written neutrally until confirm
 
 ## Must confirm before publishing
 
-- [ ] **Domain.** `site.url` is a placeholder (`https://www.buharsu.com.tr`). Canonicals, the
-      sitemap, OG tags and JSON-LD all use it.
+- [x] **Domain.** `site.url` uses the confirmed domain (`https://www.buharsuyikama.com`). Canonicals,
+      the sitemap, OG tags and JSON-LD all use it.
+- [ ] **Google Ads conversion IDs.** Set the public `AW-...` tag ID and WhatsApp / phone conversion
+      labels described in `.env.example`. Tracking and its consent controls remain off until then.
 - [ ] **Hero film** and **real photos** (see MEDIA.md). No labels on the page (owner's choice);
       placeholder media are tracked with `placeholder: true` in `src/data/site.ts`.
 - [ ] **Before/after pair.** Currently a demo (procedural, or AI if swapped in). Replace with a real
