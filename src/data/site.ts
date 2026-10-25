@@ -7,7 +7,7 @@
 //   Nothing is labelled on the page; MEDIA.md / LAUNCH.md list what to replace with real work.
 //
 // Assumptions / open items (mirrored in LAUNCH.md):
-// - Domain: `site.url` is a placeholder until the Istanbul domain is chosen.
+// - Domain: `site.url` is the confirmed Istanbul domain.
 // - The Istanbul process (on-site vs. pickup, curtain removal, overlock colours) is not confirmed,
 //   so the copy describes it neutrally ("birlikte planlıyoruz").
 // - Neighbourhood (mahalle) lists are taken from official district lists and should be checked.
@@ -15,7 +15,7 @@
 export const site = {
   name: 'BUHARSU',
   legalName: 'BUHARSU Halı ve Koltuk Yıkama', // CONFIRM: official trade name for KVKK / footer
-  url: 'https://www.buharsu.com.tr', // CONFIRM: Istanbul domain
+  url: 'https://www.buharsuyikama.com',
   locale: 'tr_TR',
   tagline: 'Koltuk, halı ve ev tekstili temizliği',
   description:

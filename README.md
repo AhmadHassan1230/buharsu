@@ -1,5 +1,17 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Google Ads contact conversions
+
+Copy `.env.example` to `.env.local` and fill the blank values with the Google Ads tag ID
+(`AW-...`) and the conversion labels created for WhatsApp and phone contact intents. The labels
+must contain only letters, numbers, underscores, or hyphens.
+
+The Google tag is loaded only after the visitor accepts the Turkish measurement prompt. WhatsApp
+and `tel:` clicks are recorded as contact intent; message text, phone numbers, addresses, and link
+query values are never included in the conversion event. No page views are marked as conversions.
+If the browser blocks first-party preference storage, tracking stays off because consent cannot be
+reliably remembered.
+
 ## Getting Started
 
 First, run the development server:
