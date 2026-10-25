@@ -39,10 +39,11 @@ export default function ServicesPage() {
               <a href={`/hizmetler/${s.slug}`} className="scard__link">
                 <figure className="scard__media" data-lanes>
                   <Image src={s.image.src} alt={s.image.alt} width={s.image.w} height={s.image.h} sizes={i < 2 ? '(max-width: 767px) 92vw, 46vw' : '(max-width: 767px) 92vw, 30vw'} quality={75} />
+                  <span className="scard__badge" aria-hidden="true"><Arrow /></span>
                 </figure>
                 <h2 className="scard__name">{s.name}</h2>
                 <p className="scard__text">{s.short}</p>
-                <span className="scard__go">Detaylar <Arrow /></span>
+                <span className="scard__go"><span>Detayları gör</span> <Arrow /></span>
               </a>
             </li>
           ))}
