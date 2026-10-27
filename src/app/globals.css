@@ -1125,6 +1125,7 @@ html.menu-open .fab { opacity: 0; pointer-events: none; }
 .legal { padding-bottom: clamp(4rem, 2.5rem + 7vh, 8rem); max-width: 60rem; display: grid; gap: 14px; }
 .legal h2 { margin-top: 18px; font-size: var(--t-m); font-weight: 600; }
 .legal p { color: var(--muted); max-width: 62ch; }
+.legal a { color: var(--ink); text-decoration: underline; text-underline-offset: 0.2em; }
 
 /* 404 */
 .nf {

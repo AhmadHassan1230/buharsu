@@ -5,8 +5,9 @@ Everything below is either hidden on the site or written neutrally until confirm
 
 ## Must confirm before publishing
 
-- [ ] **Domain.** `site.url` is a placeholder (`https://www.buharsu.com.tr`). Canonicals, the
-      sitemap, OG tags and JSON-LD all use it.
+- [x] **Domain:** `https://buharsuyikama.com` (from the AdSense setup, 2026-10-28).
+- [x] **AdSense:** `ca-pub-5284223273537745` is loaded in every page's `<head>`, and `/ads.txt` is
+      published. The KVKK page discloses ad cookies.
 - [ ] **Hero film** and **real photos** (see MEDIA.md). No labels on the page (owner's choice);
       placeholder media are tracked with `placeholder: true` in `src/data/site.ts`.
 - [ ] **Before/after pair.** Currently a demo (procedural, or AI if swapped in). Replace with a real

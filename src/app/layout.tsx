@@ -39,6 +39,9 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang="tr" className={mona.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: flags }} />
+        {/* Google AdSense: raw tag in <head> so the AdSense verifier finds it in the served HTML. */}
+        <meta name="google-adsense-account" content={site.adsense} />
+        <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${site.adsense}`} crossOrigin="anonymous" />
       </head>
       <body>
         <a className="skip-link" href="#main">İçeriğe geç</a>

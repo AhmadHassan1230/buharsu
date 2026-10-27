@@ -15,7 +15,7 @@
 export const site = {
   name: 'BUHARSU',
   legalName: 'BUHARSU Halı ve Koltuk Yıkama', // CONFIRM: official trade name for KVKK / footer
-  url: 'https://www.buharsu.com.tr', // CONFIRM: Istanbul domain
+  url: 'https://buharsuyikama.com',
   locale: 'tr_TR',
   tagline: 'Koltuk, halı ve ev tekstili temizliği',
   description:
@@ -32,6 +32,8 @@ export const site = {
     handle: '@buharsu_hali_koltuk_04',
     url: 'https://www.instagram.com/buharsu_hali_koltuk_04/',
   },
+  // Google AdSense publisher ID (from the AdSense site page). Loads adsbygoogle.js on every page.
+  adsense: 'ca-pub-5284223273537745',
   // Search engine verification codes (meta tag content values). Empty = not rendered.
   verification: { google: '', yandex: '' },
   facts: {

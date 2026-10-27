@@ -19,7 +19,17 @@ export default function Kvkk() {
         <h2>Bu site hangi bilgileri topluyor?</h2>
         <p>
           Bu web sitesinde form verisi saklanmaz. “Mesajı WhatsApp’ta aç” düğmesi, yazdığınız metni yalnızca kendi
-          WhatsApp uygulamanızda açar; mesajı gönderip göndermemek size kalmıştır. Sitede reklam veya takip çerezi kullanılmaz.
+          WhatsApp uygulamanızda açar; mesajı gönderip göndermemek size kalmıştır.
+        </p>
+        <h2>Reklamlar ve çerezler</h2>
+        <p>
+          Bu sitede Google AdSense reklamları gösterilebilir. Google ve iş ortakları, size ilgili reklamlar sunmak
+          için çerezler kullanarak bu siteye ve diğer sitelere yaptığınız ziyaretlere dair bilgileri işleyebilir.
+          Kişiselleştirilmiş reklamları{' '}
+          <a href="https://adssettings.google.com" target="_blank" rel="noopener">Google Reklam Ayarları</a>
+          {' '}üzerinden kapatabilir, Google’ın bu verileri nasıl kullandığını{' '}
+          <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">buradan</a>
+          {' '}inceleyebilirsiniz.
         </p>
         <h2>WhatsApp ve telefon görüşmeleri</h2>
         <p>
