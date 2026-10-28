@@ -21,7 +21,7 @@ export function Composer({ service, place, compact }: { service?: string; place?
   }, [svc, plc, hood, note]);
 
   return (
-    <form className={`composer ${compact ? 'composer--compact' : ''}`} onSubmit={(e) => { e.preventDefault(); window.open(wa(message), '_blank', 'noopener'); }}>
+    <form className={`composer ${compact ? 'composer--compact' : ''}`} data-contact-channel="whatsapp" onSubmit={(e) => { e.preventDefault(); window.open(wa(message), '_blank', 'noopener'); }}>
       <div className="composer__row">
         <label className="field">
           <span className="field__label">Hizmet türü</span>

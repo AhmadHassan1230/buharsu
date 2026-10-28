@@ -33,6 +33,11 @@ export default function Kvkk() {
         </p>
         <h2>WhatsApp ve telefon görüşmeleri</h2>
         <p>
+          Google Ads reklamlarının performansını değerlendirmek için telefon ve WhatsApp bağlantılarına yapılan
+          tıklamalar ölçülebilir. Bir tıklama, görüşmenin yapıldığı veya randevunun tamamlandığı anlamına gelmez.
+          WhatsApp mesaj alanına yazdığınız metin bu ölçüm kapsamında Google’a gönderilmez.
+        </p>
+        <p>
           Bize WhatsApp’tan yazdığınızda ya da {site.phones.primary.display} numarasını aradığınızda paylaştığınız bilgiler
           (ad, telefon, adres, eşya fotoğrafları) yalnızca talebinizi yanıtlamak ve hizmeti planlamak için kullanılır.
         </p>
