@@ -3,8 +3,10 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { MobileBar } from '@/components/MobileBar';
 import { Motion } from '@/components/Motion';
+import { ContactTracking } from '@/components/ContactTracking';
 import { site } from '@/data/site';
 import { businessLd, ldScript, websiteLd } from '@/lib/schema';
+import { GOOGLE_ADS_ID, googleAdsBootstrap } from '@/lib/contactTracking';
 import { mona } from './fonts';
 import './globals.css';
 
@@ -39,6 +41,8 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html lang="tr" className={mona.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: flags }} />
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`} />
+        <script dangerouslySetInnerHTML={{ __html: googleAdsBootstrap }} />
         {/* Google AdSense: raw tag in <head> so the AdSense verifier finds it in the served HTML. */}
         <meta name="google-adsense-account" content={site.adsense} />
         <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${site.adsense}`} crossOrigin="anonymous" />
@@ -60,6 +64,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
         <script type="application/ld+json" dangerouslySetInnerHTML={ldScript(businessLd())} />
         <script type="application/ld+json" dangerouslySetInnerHTML={ldScript(websiteLd())} />
         <Motion />
+        <ContactTracking />
       </body>
     </html>
   );
